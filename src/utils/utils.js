@@ -12,3 +12,10 @@ exports.UserRole = Object.freeze({
     INSTRUCTOR: 'instructor',
     STUDENT: 'student'
 });
+
+exports.throwError = (message, statusCode)=>{
+    const error = new Error();
+    error.message = message
+    error.statusCode = statusCode;
+    throw error
+}
