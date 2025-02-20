@@ -1,8 +1,9 @@
 const express = require('express')
-
+const { createCourse, updateCourse, deleteCourse, } = require('../controllers/course.controller')
 
 const verifyRole = require('../Middleware/roleverify')
 const verifyToken = require('../middleware/tokenverify')
+const verifyOwnerShip = require('../middleware/verifyOwnership')
 
 const router = express.Router()
 
@@ -13,12 +14,11 @@ router.get('/all')
 
 router.get('/:id')
 // create update and delete course
-//TODO: verify ownership of course "define middleware since we will use this alot"
-router.post('/create',verifyToken)
+router.post('/create',verifyToken,createCourse)
 
-router.patch('/:id',verifyToken)
+router.patch('/:id',verifyToken,verifyOwnerShip,updateCourse)
 
-router.delete('/:id',verifyToken)
+router.delete('/:id',verifyToken,verifyOwnerShip,deleteCourse)
 
 
 module.exports = router;

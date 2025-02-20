@@ -29,10 +29,12 @@ const courseSchema = new mongoose.Schema({
     //   does course with like 200 lesson (videos , quizes , read blog post ) will exceed this size provided by mongo       
   lessons: [lessonSchema],  // Embedding lessons directly inside the course document
   price: Number,
-  createdAt: Date,
-  updatedAt: Date
-});
+},{ typestamps: true });
+
+let db = mongoose.connection.useDb("myDataBase")
 // create doc for category case we ref this field inside the course entity
-const Category = mongoose.model('Category', categorySchema);
-const Course = mongoose.model('Course', courseSchema);
+const Category = db.model('Category', categorySchema);
+const Course = db.model('Course', courseSchema);
+
+module.exports = {Category,Course}
 
