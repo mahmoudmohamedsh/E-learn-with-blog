@@ -1,5 +1,22 @@
 const { UserRole } = require('../utils/utils')
 const mongoose = require("mongoose");
+
+const ProfileSchema = new mongoose.Schema({
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    profilePic: {
+        type: String
+    },
+    website: {
+        type: String
+    },
+    social: [{
+        url: { type: String, required: true },
+        website: { type: String, required: true, enum: ["FaceBook", "X", "Instegram", "LinkedIn", "mideam"] }
+    }],
+})
+
+
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -9,13 +26,15 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         required: true,
-        enum: Object.values(UserRole)
+        enum: Object.values(UserRole),
+        default: UserRole.STUDENT
     },
     password: {
         type: String,
         required: true,
-    }
+    },
+    profile: ProfileSchema,
 }, { typestamps: true })
 
-let db = mongoose.connection.useDb("myDataBase")
-module.exports = db.model("User", userSchema)
+
+module.exports = mongoose.model("User", userSchema)
