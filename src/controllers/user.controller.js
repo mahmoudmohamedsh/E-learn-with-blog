@@ -1,9 +1,37 @@
-const { StatusCode } = require("../utils/utils")
+const { StatusCode, throwError } = require("../utils/utils")
+const User = require('../models/user.model')
 
-//TODO: DEFINE PROFILE
-exports.getProfile = (req,res,next) =>{
-    res.status(StatusCode.SUCCESS).send({profile:req.user})
+exports.getProfile = async (req, res, next) => {
+    try {
+        //get user
+        const user = await User.findById(req.user.id)
+        if (!user) throwError("unautharaized", StatusCode.BAD_REQUEST)
+        //get profile
+        res.status(StatusCode.SUCCESS).send({ message: "success", profile: user })
+        //return profile
+    } catch (error) {
+        next(error)
+    }
 }
-//TODO: make getCourses
+
+exports.updateProfile = async (req, res, next) => {
+    try {
+        const { firstName, lastName, profilePic, website, social } = req.body;
+        const user = await User.findById(req.user.id)
+        if (!user) throwError("unautharaized", StatusCode.BAD_REQUEST)
+        user.profile = {
+            firstName,
+            lastName,
+            social,
+            profilePic,
+            website
+        }
+        const newuser = await user.save();
+        res.status(StatusCode.SUCCESS).send({ message: "sueccess", profile: newuser.profile })
+    } catch (error) {
+        next(error)
+    }
+}
+
 
 

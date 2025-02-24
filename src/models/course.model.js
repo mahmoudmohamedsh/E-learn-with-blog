@@ -1,12 +1,7 @@
-//TODO: design change base on those questions i have 
-
+const { CourseCategory } = require("../utils/utils")
 const mongoose = require('mongoose');
 
-// Category Schema
-const categorySchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: String
-});
+
 
 // Lesson Schema
 const lessonSchema = new mongoose.Schema({
@@ -20,21 +15,20 @@ const lessonSchema = new mongoose.Schema({
 const courseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: String,
-    // can more than one instructor exist ? like in univercity we have the teacher and his 2 or 3 master student help hem
-    // in many course website i saw them ref to the course by only single person 
-    // and monst of the time the course only explain and it's content created by one person
+  imageUrl: String,
   instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, //Ref single user the one who create this course 
-  categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }], // Ref array categories
-    // does this efficiant ? case as i know doc of mongodb can only go upto 16MB 
-    //   does course with like 200 lesson (videos , quizes , read blog post ) will exceed this size provided by mongo       
-  lessons: [lessonSchema],  // Embedding lessons directly inside the course document
+  category: {
+    type: [String],
+    enum: Object.values(CourseCategory),
+  },
   price: Number,
-},{ typestamps: true });
+}, { typestamps: true });
 
-let db = mongoose.connection.useDb("myDataBase")
-// create doc for category case we ref this field inside the course entity
-const Category = db.model('Category', categorySchema);
-const Course = db.model('Course', courseSchema);
+console.log(Object.values(CourseCategory))
 
-module.exports = {Category,Course}
+
+const Lesson = mongoose.model('Lesson', lessonSchema);
+const Course = mongoose.model('Course', courseSchema);
+
+module.exports = { Lesson, Course }
 

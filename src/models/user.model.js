@@ -14,6 +14,10 @@ const ProfileSchema = new mongoose.Schema({
         url: { type: String, required: true },
         website: { type: String, required: true, enum: ["FaceBook", "X", "Instegram", "LinkedIn", "mideam"] }
     }],
+    courses: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Course'
+    }]
 })
 
 

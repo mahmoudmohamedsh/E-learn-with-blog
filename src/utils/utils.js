@@ -13,6 +13,12 @@ exports.UserRole = Object.freeze({
     STUDENT: 'student'
 });
 
+exports.CourseCategory = Object.freeze({
+    BACKEND:"backend",
+    FrontEnd:"frontend"
+});
+
+
 exports.throwError = (message, statusCode)=>{
     const error = new Error();
     error.message = message
